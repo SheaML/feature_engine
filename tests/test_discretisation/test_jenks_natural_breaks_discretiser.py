@@ -43,9 +43,7 @@ def test_correct_param_assignment_at_init(params):
 
 
 def test_fit_and_transform_methods():
-    transformer = JenksDiscretiser(
-        bins=4, variables=None, return_object=False
-    )
+    transformer = JenksDiscretiser(bins=4, variables=None, return_object=False)
     x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     test_df = pd.DataFrame({"var": x})
 

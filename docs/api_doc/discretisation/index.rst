@@ -18,6 +18,7 @@ into continuous intervals.
 :class:`ArbitraryDiscretiser()`          Sorts values into intervals predefined by the user.
 :class:`DecisionTreeDiscretiser()`       Replaces values by predictions of a decision tree, which are discrete.
 :class:`GeometricWidthDiscretiser()`     Sorts variable into geometrical intervals.
+:class:`JenksDiscretiser()`               Sorts values into intervals using the Jenks natural breaks algorithm
 =====================================  ========================================================================
 
 
@@ -30,6 +31,7 @@ into continuous intervals.
    ArbitraryDiscretiser
    DecisionTreeDiscretiser
    GeometricWidthDiscretiser
+   JenksDiscretiser
 
 Additional transformers for discretisation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

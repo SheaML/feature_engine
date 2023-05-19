@@ -138,6 +138,7 @@ Variable Discretisation: Discretisers
 - :doc:`api_doc/discretisation/EqualWidthDiscretiser`: sorts variable into equal width intervals
 - :doc:`api_doc/discretisation/DecisionTreeDiscretiser`: uses decision trees to create finite variables
 - :doc:`api_doc/discretisation/GeometricWidthDiscretiser`: sorts variable into geometrical intervals
+- :doc:`api_doc/discretisation/JenksDiscretiser`: sorts variable into intervals defined by the Jenks natural breaks algorithm
 
 Outlier Capping or Removal
 --------------------------

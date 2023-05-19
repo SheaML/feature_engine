@@ -4,34 +4,23 @@
 from typing import List, Optional, Union
 
 import pandas as pd
-
-from feature_engine._docstrings.fit_attributes import (
-    _binner_dict_docstring,
-    _feature_names_in_docstring,
-    _n_features_in_docstring,
-    _variables_attribute_docstring,
-)
-from feature_engine._docstrings.init_parameters.discretisers import (
-    _precision_docstring,
-    _return_boundaries_docstring,
-    _return_object_docstring,
-)
-from feature_engine._docstrings.methods import (
-    _fit_not_learn_docstring,
-    _fit_transform_docstring,
-    _transform_discretiser_docstring,
-)
-from feature_engine._docstrings.substitute import Substitution
-from feature_engine.discretisation.base_discretiser import BaseDiscretiser
-
-from feature_engine.variable_handling._init_parameter_checks import (
-    _check_init_parameter_variables,
-)
-
 from jenkspy import JenksNaturalBreaks
 
+from feature_engine._docstrings.fit_attributes import (
+    _binner_dict_docstring, _feature_names_in_docstring,
+    _n_features_in_docstring, _variables_attribute_docstring)
+from feature_engine._docstrings.init_parameters.discretisers import (
+    _precision_docstring, _return_boundaries_docstring,
+    _return_object_docstring)
+from feature_engine._docstrings.methods import (
+    _fit_not_learn_docstring, _fit_transform_docstring,
+    _transform_discretiser_docstring)
+from feature_engine._docstrings.substitute import Substitution
+from feature_engine.discretisation.base_discretiser import BaseDiscretiser
+from feature_engine.variable_handling._init_parameter_checks import \
+    _check_init_parameter_variables
 
-# TODO: double-check all this documentation logic
+
 @Substitution(
     return_object=_return_object_docstring,
     return_boundaries=_return_boundaries_docstring,
@@ -46,8 +35,64 @@ from jenkspy import JenksNaturalBreaks
 )
 class JenksDiscretiser(BaseDiscretiser):
     """
-    The JenksDiscretiser() divides numerical variables into intervals using the Jenks
-    natural breaks algorithm.
+    The JenksDiscretiser() divides continuous numerical variables into intervals or bins
+    using the Jenks Natural Breaks algorithm. This algorithm aims to minimize the
+    variance within each interval while maximizing the variance between intervals.
+
+    The Jenks Natural Breaks algorithm iteratively finds the best break points that
+    minimize the sum of squared deviations from the class means. It starts by
+    initializing the break points at equal intervals, and then optimizes their
+    positions to achieve the desired number of intervals (bins).
+
+    The `JenksDiscretiser()` works well when the distribution of the variable exhibits
+    natural groupings or thresholds.
+
+    Note: The number of bins (intervals) must be specified using the `bins` parameter,
+    and there must be at least as many unique values in every variable to be transformed
+    as there are bins.
+
+    The :class:`JenksDiscretiser()` works only with numerical variables. You can
+    indicate a list of variables to discretize, or the discretiser will automatically
+    select all numerical variables in the training set.
+
+    Parameters
+    ----------
+    {variables_}
+
+    bins: int, default=10
+        Desired number of intervals/bins.
+
+    {return_object}
+
+    {return_boundaries}
+
+    {precision}
+
+    Attributes
+    ----------
+    {binner_dict_}
+
+    {variables_}
+
+    {feature_names_in_}
+
+    {n_features_in_}
+
+    Methods
+    -------
+    {fit}
+
+    {fit_transform}
+
+    {transform}
+
+    References
+    ----------
+    .. [1] Jenks Natural Breaks Classification Method
+       https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization
+
+    .. [2] Jenks, G. F. (1977). "Optimal Data Classification for Choropleth Maps".
+       https://www.georgefisher.com/research/jenks.pdf
     """
 
     def __init__(
@@ -58,7 +103,6 @@ class JenksDiscretiser(BaseDiscretiser):
         return_boundaries: bool = False,
         precision: int = 3,
     ) -> None:
-
         if not isinstance(return_object, bool):
             raise ValueError(
                 "return_object must be True or False. " f"Got {return_object} instead."
@@ -75,17 +119,18 @@ class JenksDiscretiser(BaseDiscretiser):
                 "precision must be a positive integer. " f"Got {precision} instead."
             )
 
+        if not isinstance(bins, int) or bins < 1:
+            raise ValueError(
+                "bins must be a positive integer. " f"Got {bins} instead." f""
+            )
+
         self.return_object = return_object
         self.return_boundaries = return_boundaries
         self.precision = precision
-        if not isinstance(bins, int):
-            raise ValueError(
-                "bins must be an integer. " f"Got {bins} instead." f""
-            )
         self.bins = bins
         self.variables = _check_init_parameter_variables(variables)
 
-    def fit(self, X: pd.DataFrame, y: Optional[pd.Series] = None):  # type: ignore
+    def fit(self, X: pd.DataFrame, y: Optional[pd.Series] = None):
         """
         Fit the JenksDiscretiser to the train set X.
 

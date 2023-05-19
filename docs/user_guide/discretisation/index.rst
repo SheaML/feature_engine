@@ -35,3 +35,4 @@ Throughout the user guide, we point to jupyter notebooks that showcase this func
    ArbitraryDiscretiser
    DecisionTreeDiscretiser
    GeometricWidthDiscretiser
+   JenksDiscretiser
